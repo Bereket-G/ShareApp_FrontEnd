@@ -52,12 +52,16 @@ const styles = theme => ({
 });
 
 class SinglePost extends React.Component {
-  state = { 
-      expanded: false,
-      title: "Hello World",
-      subheader: "Date Goes here",
-      topics : [ "MySQL", "SQL", "Database" ]
-    };
+  constructor(props){
+    super(props);
+    this.state = { 
+        expanded: false,
+        title: this.props.title,
+        subheader: Date(),
+        topics : [ "MySQL", "SQL", "Database" ]
+      };
+
+  }
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));

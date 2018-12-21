@@ -38,9 +38,9 @@ const styles = theme => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: fade(theme.palette.common.black, 0.10),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: fade(theme.palette.common.black, 0.05),
     },
     marginRight: theme.spacing.unit * 2,
     marginLeft: 0,
@@ -170,7 +170,7 @@ class Header extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="primary">
+        <AppBar position="static" color="default">
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
               <MenuIcon />

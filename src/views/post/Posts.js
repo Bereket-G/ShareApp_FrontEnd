@@ -5,14 +5,14 @@ export default class Posts extends Component {
     constructor(props){
         super(props);
         this.state = {
-
+            posts: [{title: "Post 1"},{title: "Post 2"},{title: "Post 3"},{title: "Post 4"},{title: "Post 5"},{title: "Post 6"},{title: "Post 7"},{title: "Post 8"}]
         }
     }
     componentDidMount(){
         this.props.changeTitle(this.props.match.params.topic || "Home");
     }
   render() {
-      const list = [1,2,3,4,5,6,7,8,9,0];
+      const list = this.state.posts
     return (
       <div>
         {
@@ -21,7 +21,7 @@ export default class Posts extends Component {
                     <div key={idx} >
                     <br />
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <SinglePost key={idx} />
+                        <SinglePost key={idx} title={item.title}/>
                     </div>
                     </div>
                 );
