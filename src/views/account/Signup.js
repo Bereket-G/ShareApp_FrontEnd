@@ -93,19 +93,19 @@ class SignIn extends React.Component{
                     <form className={classes.form} type="POST">
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">Email Address</InputLabel>
-                            <Input id="email" name="username"  onChange={(e)=>{this.setState({email:e.target.value});}}  autoComplete="email" autoFocus />
+                            <Input id="email" name="email"  onChange={(e)=>{this.setState({email:e.target.value});}}  autoComplete="email" autoFocus />
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">Username</InputLabel>
-                            <Input id="email" name="username"  onChange={(e)=>{this.setState({username:e.target.value});}}  autoComplete="email" autoFocus />
+                            <Input id="username" name="username"  onChange={(e)=>{this.setState({username:e.target.value});}}  autoComplete="username" autoFocus />
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">First Name</InputLabel>
-                            <Input id="email" name="username"  onChange={(e)=>{this.setState({firstname:e.target.value});}}  autoComplete="email" autoFocus />
+                            <Input id="firstname" name="firstname"  onChange={(e)=>{this.setState({firstname:e.target.value});}}  autoComplete="firstname" autoFocus />
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">Last Name</InputLabel>
-                            <Input id="email" name="username"  onChange={(e)=>{this.setState({lastname:e.target.value});}}  autoComplete="email" autoFocus />
+                            <Input id="lastname" name="lastname"  onChange={(e)=>{this.setState({lastname:e.target.value});}}  autoComplete="lastname" autoFocus />
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="password">Password</InputLabel>
