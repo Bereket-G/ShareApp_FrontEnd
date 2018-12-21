@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
+// import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -13,9 +13,10 @@ import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
+// import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Api from '../api';
 
 const styles = theme => ({
   root: {
@@ -102,6 +103,11 @@ class Header extends React.Component {
     this.handleMobileMenuClose();
   };
 
+  handleLogout = () => {
+    this.handleMenuClose();
+    Api.logout();
+  }
+
   handleMobileMenuOpen = event => {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
   };
@@ -125,7 +131,7 @@ class Header extends React.Component {
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={this.handleLogout}>Log out</MenuItem>
       </Menu>
     );
 
@@ -137,14 +143,14 @@ class Header extends React.Component {
         open={isMobileMenuOpen}
         onClose={this.handleMobileMenuClose}
       >
-        <MenuItem>
+        {/* <MenuItem>
           <IconButton color="inherit">
-            {/* <Badge badgeContent={4} color="secondary"> */}
+            <Badge badgeContent={4} color="secondary">
               <MailIcon />
-            {/* </Badge> */}
+            </Badge>
           </IconButton>
           <p>Messages</p>
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem>
           <IconButton color="inherit">
             {/* <Badge badgeContent={11} color="secondary"> */}
@@ -164,7 +170,7 @@ class Header extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" color="primary">
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
               <MenuIcon />
@@ -177,20 +183,20 @@ class Header extends React.Component {
                 <SearchIcon />
               </div>
               <InputBase
-                placeholder="Search…"
+                placeholder="Search"
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
-              />
+                />
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                {/* <Badge badgeContent={4} color="secondary"> */}
+              {/* <IconButton color="inherit">
+                <Badge badgeContent={4} color="secondary"> 
                   <MailIcon />
-                {/* </Badge> */}
-              </IconButton>
+                  </Badge>
+                </IconButton> */}
               <IconButton color="inherit">
                 {/* <Badge badgeContent={17} color="secondary"> */}
                   <NotificationsIcon />
@@ -201,7 +207,7 @@ class Header extends React.Component {
                 aria-haspopup="true"
                 onClick={this.handleProfileMenuOpen}
                 color="inherit"
-              >
+                >
                 <AccountCircle />
               </IconButton>
             </div>

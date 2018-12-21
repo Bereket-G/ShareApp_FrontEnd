@@ -56,10 +56,11 @@ class SignIn extends React.Component{
         }
     }
 
-    login = () => {
+    login = (e) => {
+        e.preventDefault();
         Api.login(this.state.username, this.state.password)
             .then(response => {
-                console.log(response);
+                this.props.history.push('/');
             })
             .catch(error => {
                 console.log(error);
@@ -79,7 +80,7 @@ class SignIn extends React.Component{
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <form className={classes.form}>
+                    <form className={classes.form} type="POST">
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">Username</InputLabel>
                             <Input id="email" name="username"  onChange={(e)=>{this.setState({username:e.target.value});}}  autoComplete="email" autoFocus />
@@ -103,6 +104,15 @@ class SignIn extends React.Component{
                             Sign in
                         </Button>
                     </form>
+                    <Button
+                            fullWidth
+                            variant="contained"
+                            color="secondary"
+                            className={classes.submit}
+                            onClick={() => this.props.history.push('register')}
+                        >
+                            Sign Up
+                        </Button>
                 </Paper>
             </main>
         );
