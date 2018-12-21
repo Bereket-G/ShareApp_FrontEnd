@@ -1,4 +1,4 @@
-import * as session from 'browser-session-store';
+import * as session from 'browser-store';
 import Cookies from 'universal-cookie';
 
 class ClientSession {

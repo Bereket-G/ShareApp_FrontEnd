@@ -6,6 +6,45 @@ let API_BASE_URL = 'http://localhost:5000/api/';
 export default class Api{
 
   static API_BASE_URL = API_BASE_URL;
+
+  static login = (email, password) => {
+    const url ='users/login?include=roles';
+    if (email && password) {
+        const regExp = new RegExp
+        (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        return Api.create(url, {[regExp.test(email) ? "email": "username"]: email, "password": password, "ttl": 300000000})
+            .then(
+                response => {
+                    ClientSession.storeAuth(response.data, err => {});
+                    return {
+                        success: true,
+                        message: "Logged in successfuly",
+                        user: response.data
+                    }
+                },
+                error => {
+                    if (error.response) {
+                        if (error.response.status == 401) {
+                            return {
+                                error: true,
+                                message: "Incorrect username or password"
+                            }
+                        }
+                        return {
+                            error: true,
+                            message: "Oops error occured please. Try Again"
+                        }
+                    }
+                    return {
+                        error: true,
+                        message: "Error: Not connected"
+                    }
+
+                }
+        );
+    }
+
+  };
   static create(pluralName, data, filter=null){
 
     let url = API_BASE_URL + pluralName;

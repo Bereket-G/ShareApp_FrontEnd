@@ -4,7 +4,7 @@ export default class Signup extends Component {
   render() {
     return (
       <div>
-         Signuping  INNNNN
+         Signuping  
       </div>
     )
   }
