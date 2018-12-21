@@ -97,7 +97,7 @@ class SignIn extends React.Component{
                             type="submit"
                             fullWidth
                             variant="contained"
-                            color="primary"
+                            color="secondary"
                             className={classes.submit}
                             onClick={this.login}
                         >
@@ -107,7 +107,7 @@ class SignIn extends React.Component{
                     <Button
                             fullWidth
                             variant="contained"
-                            color="secondary"
+                            color="primary"
                             className={classes.submit}
                             onClick={() => this.props.history.push('register')}
                         >
