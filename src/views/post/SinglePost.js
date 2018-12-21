@@ -92,9 +92,10 @@ class SinglePost extends React.Component {
            TODO: Description goes here
           </Typography>
 
-            {this.state.topics.map( (value ) => {
+            {this.state.topics.map( (value, idx ) => {
                 return (
                     <Chip
+                        key={idx}
                         label= {value}
                         color="primary"
                         variant="outlined"
