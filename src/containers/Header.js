@@ -178,6 +178,10 @@ class Header extends React.Component {
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               ShareApp
             </Typography>
+            <span style={{marginLeft:"50px"}}></span>
+            <Typography className={classes.title} variant="subtitle1" color="secondary" noWrap>
+              {this.props.title}
+            </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
