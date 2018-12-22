@@ -18,11 +18,9 @@ export default class Posts extends Component {
     this.getPosts();
   }
   onClick = key => {
-    if (!this.state.isHidden) {
-      this.setState({
-        topicTitle: key
-      });
-    }
+    this.setState({
+      topicTitle: key
+    });
   };
   getPosts = () => {
     let m_topic = this.props.match.params.topic;
@@ -54,6 +52,9 @@ export default class Posts extends Component {
     console.log(this.state.topicTitle === "Home", this.state.topicTitle);
     return (
       <div>
+        <br />
+        <br />
+        <br />
         <Topic
           topicTitle={this.state.topicTitle}
           topicDesc={
@@ -83,6 +84,10 @@ export default class Posts extends Component {
             );
           })}
         </div>
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     );
   }
