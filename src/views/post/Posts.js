@@ -21,7 +21,7 @@ export default class Posts extends Component {
                     <div key={idx} >
                     <br />
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <SinglePost key={idx} title={item.title}/>
+                        <SinglePost changeTitle = {this.props.changeTitle} key={idx} title={item.title}/>
                     </div>
                     </div>
                 );
