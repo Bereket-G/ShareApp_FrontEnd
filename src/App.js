@@ -13,7 +13,11 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <SnackbarProvider maxSnack={3}>
+      <SnackbarProvider maxSnack={1} anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
         <HashRouter>
           <Switch>
             <Route exact path="/login" name="Login Page" component={Login} />

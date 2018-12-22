@@ -24,7 +24,6 @@ import { withRouter } from 'react-router-dom';
 
 // import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import PdfViewer from '../pdf/PdfViewer';
 
 const styles = theme => ({
     card: {
