@@ -36,8 +36,9 @@ export default class Posts extends Component {
             else{
               post.topic.map( item => {
                 if(item.name === m_topic){
-                  posts.push(post);
+                  return posts.push(post);
                 }
+                return null;
               })
             }
             this.setState({ posts });

@@ -17,6 +17,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 // import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import { withRouter } from "react-router-dom";
 import Api from "../api";
 
 const styles = theme => ({
@@ -177,8 +178,15 @@ class Header extends React.Component {
             <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} style={{}} variant="h6" color="inherit" noWrap>
-              <CastForEducationSharp />
+            <Typography
+              className={classes.title}
+              variant="h6"
+              color="inherit"
+              noWrap
+              onClick={e => this.props.history.push("/")}
+              style={{ cursor: "pointer" }}
+            >
+              <CastForEducationSharp style={{ marginTop: "5px", marginRight: "5px" }} />
               myEdu
             </Typography>
             <span style={{ marginLeft: "50px" }} />
@@ -236,4 +244,4 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Header);
+export default withRouter(withStyles(styles)(Header));
