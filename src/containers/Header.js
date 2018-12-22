@@ -24,6 +24,7 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import ClientSession from "../api/client-session";
 
 const styles = theme => ({
   list: {
@@ -110,6 +111,19 @@ class Header extends React.Component {
       subscribedTopics: []
     };
     // this.sidebar = React.createRef();
+  }
+  componentDidMount(){
+    this.getSubscriptions();
+  }
+
+  getSubscriptions = () => {
+    ClientSession.getAuth((err, value) => {
+      Api.findRelated('users','subscriptions',value.user.id)
+          .then( response => {
+            console.log(response);
+            this.setState({subscribedTopics: response.data})
+          })
+    })
   }
 
   handleProfileMenuOpen = event => {
@@ -199,12 +213,14 @@ class Header extends React.Component {
         <Divider />
         <List>
           <ListItemIcon style={{ padding: "10px" }}>
-            <Subscriptions /> &nbsp;&nbsp;&nbsp;&nbsp; Subscriptions
+            <div>
+              <Subscriptions /> &nbsp;&nbsp;&nbsp;&nbsp; Subscriptions
+            </div>
           </ListItemIcon>
-          {/* {this.state.subscribedTopics.map(topicTitle => ( */}
-          {["ToPIC 1", "ToPIC 2"].map(topicTitle => (
-            <ListItem button key={topicTitle}>
-              <ListItemText primary={topicTitle} />
+          {this.state.subscribedTopics.map(topic => (
+          // {["ToPIC 1", "ToPIC 2"].map(topicTitle => (
+            <ListItem button key={topic.id} onClick={(e)=> {this.props.changeTitle(topic.name);this.props.history.push("/"+topic.name);}}>
+              <ListItemText primary={topic.name} />
             </ListItem>
           ))}
         </List>

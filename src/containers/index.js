@@ -16,7 +16,7 @@ class Container extends Component {
   render() {
     return (
       <div style={{backgroundColor:"#dae0e6"}}>
-          <Header title={this.state.title}/>
+          <Header title={this.state.title} changeTitle={this.changeTitle}/>
             <Switch>
             {routes.map((route, idx) => {
                     return route.component ? <Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
