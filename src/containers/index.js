@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import {Redirect, Route, Switch} from 'react-router-dom';
+import { withSnackbar } from 'notistack';
 
 import Header from "./Header"
 import Footer from "./Footer"
 import routes from "../routes"
 
-export default class Container extends Component {
+class Container extends Component {
   state = {
     title: "Home"
   }
@@ -19,14 +20,18 @@ export default class Container extends Component {
             <Switch>
             {routes.map((route, idx) => {
                     return route.component ? <Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
-                        <route.component {...props} changeTitle={this.changeTitle}/>
+                        <route.component {...props} enqueueSnackbar={this.props.enqueueSnackbar} changeTitle={this.changeTitle}/>
                       )} />
                       : (null);
                   },
                 )}
+                <Redirect to="/" />
             </Switch>
          <Footer />
       </div>
     )
   }
-}
+};
+
+
+export default withSnackbar(Container)

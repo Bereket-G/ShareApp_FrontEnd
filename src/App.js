@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
+
 import Login from './views/account/Login';
 import Signup from './views/account/Signup';
 import Container from './containers';
@@ -11,14 +13,15 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <HashRouter>
-        <Switch>
-          <Route exact path="/login" name="Login Page" component={Login} />
-          <Route exact path="/register" name="Register Page" component={Signup} />
-          <PrivateRoute path="/" name="Home" component={Container} />
-        </Switch>
-      </HashRouter>
-
+      <SnackbarProvider maxSnack={3}>
+        <HashRouter>
+          <Switch>
+            <Route exact path="/login" name="Login Page" component={Login} />
+            <Route exact path="/register" name="Register Page" component={Signup} />
+            <PrivateRoute path="/" name="Home" component={Container} />
+          </Switch>
+        </HashRouter>
+      </SnackbarProvider>
     );
   }
 }
