@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.7.0",
     "@material-ui/icons": "^3.0.1",
+    "@react-pdf/renderer": "^1.1.0",
     "antd": "^3.11.2",
     "axios": "^0.18.0",
     "browser-store": "^2.0.2",
@@ -12,9 +13,12 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-loadable": "^5.5.0",
+    "react-pdf": "^4.0.0",
+    "react-perfect-scrollbar": "^1.4.2",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
+    "react-scroll-box": "^0.3.5",
     "react-select": "^2.1.2",
     "universal-cookie": "^3.0.7"
   },
