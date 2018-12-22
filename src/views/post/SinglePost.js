@@ -95,6 +95,7 @@ class SinglePost extends React.Component {
   topicClicked = topic => {
     this.props.changeTitle(topic);
     this.props.history.push("/" + topic);
+    this.props.onClick(topic);
   };
 
   render() {
@@ -116,12 +117,7 @@ class SinglePost extends React.Component {
           title={this.state.title}
           subheader={this.state.subheader}
         />
-        {/* <CardMedia
-                  className={classes.media}
-                  image="/static/images/cards/paella.jpg"
-                  title="Paella dish"
-              /> */}
-        <PdfViewer file={this.props.file}/>
+        <PdfViewer file={this.props.file} />
         <CardContent>
           <Typography component="p">{this.props.description}</Typography>
 
