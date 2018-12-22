@@ -30,16 +30,15 @@ export default class Posts extends Component {
         response.data.map((post, idx) => {
           return Api.findRelated("posts", "topics", post.id).then(response => {
             post.topic = response.data;
-            if(!m_topic){
+            if (!m_topic) {
               posts.push(post);
-            }
-            else{
-              post.topic.map( item => {
-                if(item.name === m_topic){
+            } else {
+              post.topic.map(item => {
+                if (item.name === m_topic) {
                   return posts.push(post);
                 }
                 return null;
-              })
+              });
             }
             this.setState({ posts });
           });

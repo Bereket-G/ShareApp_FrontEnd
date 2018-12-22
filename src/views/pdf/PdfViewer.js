@@ -20,7 +20,7 @@ export default class PdfViewer extends Component {
   };
   handlePdfClick = ({ numPages }) => {
     // window.open(this.props.pdf, "_blank");
-    // this.props.history.push("/" + key + "");
+    // this.props.history.push("/" + topic + topic.id);
   };
 
   render() {
