@@ -24,7 +24,7 @@ export default class Posts extends Component {
   };
   getPosts = () => {
     let m_topic = this.props.match.params.topic;
-    Api.find("posts")
+    Api.find("posts", null, `filter={"include":"user"}`)
       .then(response => {
         let posts = [];
         response.data.map((post, idx) => {
@@ -72,8 +72,11 @@ export default class Posts extends Component {
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <SinglePost
                     changeTitle={this.props.changeTitle}
+                    enqueueSnackbar={this.props.enqueueSnackbar}
                     onClick={this.onClick}
                     key={item.id}
+                    id={item.id}
+                    user={item.user}
                     title={item.title}
                     description={item.description}
                     file={item.file}

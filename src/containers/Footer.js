@@ -15,9 +15,11 @@ import Button from "@material-ui/core/Button";
 import Avatar from "@material-ui/core/Avatar";
 import red from "@material-ui/core/colors/red";
 import { withSnackbar } from "notistack";
+import { withRouter } from "react-router-dom";
 
 import NewPost from "../views/post/newPost";
 import Api from "../api";
+import ClientSession from "../api/client-session";
 
 const styles = theme => ({
   avatar: {
@@ -87,11 +89,18 @@ class Footer extends React.Component {
           if (files.length) {
             var file = files[0];
             post.file = `${Api.API_BASE_URL}Containers/${file.container}/download/${file.name}`;
-            Api.create("posts", post)
+            ClientSession.getAuth((err, value) => {
+            
+            Api.createRelated("users","posts", value.user.id, post)
               .then(response => {
                 this.state.topics.map((topic, idx) => {
                   if (this.state.topics.length - 1 === idx) {
-                    //TODO REFRESH!!!
+                    return Api.create("post_topics", {
+                      postId: response.data.id,
+                      topicId: topic.value
+                    }).then( response => {
+                      window.location.reload()
+                    });
                   }
                   return Api.create("post_topics", {
                     postId: response.data.id,
@@ -104,6 +113,7 @@ class Footer extends React.Component {
                 console.log(error);
                 this.props.enqueueSnackbar("Sorry! upload failed", { variant: "error" });
               });
+            });
           }
         })
         .catch(error => {
@@ -180,4 +190,4 @@ Footer.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withSnackbar(withStyles(styles)(Footer));
+export default withRouter(withSnackbar(withStyles(styles)(Footer)));

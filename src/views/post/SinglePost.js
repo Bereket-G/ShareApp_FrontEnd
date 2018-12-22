@@ -26,6 +26,8 @@ import { withRouter } from "react-router-dom";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import PdfViewer from "../pdf/PdfViewer";
 import moment from "moment";
+import Api from '../../api';
+import ClientSession from '../../api/client-session';
 
 const styles = theme => ({
   card: {
@@ -72,7 +74,9 @@ class SinglePost extends React.Component {
       expanded: false,
       title: this.props.title,
       voteCount: 0,
-      subheader: moment(this.props.createdAt).format("MMM DD, YYYY HH:mm"),
+      upvoted: false,
+      downvoted: false,
+      subheader: moment(this.props.createdAt).format("HH:mm on MMM DD")+" by "+this.props.user.firstname,
       topics: this.props.topics
     };
   }
@@ -81,13 +85,126 @@ class SinglePost extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
+  componentDidMount() {
+    this.getVoteCount();
+    this.setVoteStatus();
+  }
+
   upVote = () => {
-    this.setState({ voteCount: this.state.voteCount + 1 });
+    let data = {postId: this.props.id}
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      data.userId = value.user.id;
+    });
+    let where = `where=${JSON.stringify(data)}`;
+    data.upVote = true;
+    Api.create('votes/upsertWithWhere', data, where)
+        .then( response => {
+          this.setState({upvoted:true, downvoted:false})
+          this.getVoteCount();
+          // this.props.enqueueSnackbar("Upvoted!", {variant:"success"});
+        }).catch(error => {
+          this.getVoteCount();
+          // this.props.enqueueSnackbar("Error!", {variant:"error"});
+        })
+  };
+  deleteUpVote = () => {
+    let data = {postId: this.props.id}
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      data.userId = value.user.id;
+    });
+    data.upVote = true;
+    Api.find('votes',null,`filter={"where":${JSON.stringify(data)}}`)
+        .then( response => {
+          if(response.data.length){
+            Api.destroy('votes', response.data[0].id)
+              .then( response => {
+                this.setState({upvoted:false,downvoted:false})
+                this.getVoteCount();
+              }).catch(error => {
+                this.getVoteCount();
+              })
+          }
+        }).catch(error => {
+          this.getVoteCount();
+        })
+  }
+  deleteDownVote = () => {
+    let data = {postId: this.props.id}
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      data.userId = value.user.id;
+    });
+    data.upVote = false;
+    Api.find('votes',null,`filter={"where":${JSON.stringify(data)}}`)
+        .then( response => {
+          if(response.data.length){
+            Api.destroy('votes', response.data[0].id)
+              .then( response => {
+                this.setState({downvoted:false, upvoted:false})
+                this.getVoteCount();
+              }).catch(error => {
+                this.getVoteCount();
+              })
+          }
+        }).catch(error => {
+          this.getVoteCount();
+        })
+  }
+  downVote = () => {
+    let data = {postId: this.props.id}
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      data.userId = value.user.id;
+    });
+    let where = `where=${JSON.stringify(data)}`;
+    data.upVote = false;
+    Api.create('votes/upsertWithWhere', data, where)
+        .then( response => {
+          this.setState({downvoted:true, upvoted:false})
+          this.getVoteCount();
+          // this.props.enqueueSnackbar("Downvoted!", {variant:"info"});
+        }).catch(error => {
+          this.getVoteCount();
+          // this.props.enqueueSnackbar("Error!", {variant:"error"});
+        })
   };
 
-  downVote = () => {
-    this.setState({ voteCount: this.state.voteCount - 1 });
-  };
+  getVoteCount = () => {
+    let filter = `filter={"where":{"postId":"${this.props.id}"}}`
+    let count = 0;
+    Api.find('votes', null, filter)
+      .then( response => {
+        if(!response.data.length){
+          this.setState({voteCount: 0})
+        }
+        response.data.map( vote => {
+          if(vote.upVote){
+            count++;
+          }
+          else {
+            count--;
+          }
+          this.setState({voteCount: count})
+        })
+      })
+  }
+
+  setVoteStatus = () => {
+    let postId = this.props.id;
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      let userId = value.user.id;
+      let filter = `filter={"where":{"userId":"${userId}","postId":"${postId}"}}`
+      Api.find('votes', null, filter)
+          .then( response => {
+            if(response.data.length && response.data[0]){
+              this.setState({upvoted:response.data[0].upVote, downvoted: !response.data[0].upVote});
+            }
+          }).catch(error => console.log(error));
+    });
+  }
 
   saveToFavorite = () => {
     // save to favorite
@@ -110,7 +227,7 @@ class SinglePost extends React.Component {
         <CardHeader
           avatar={
             <Avatar aria-label="Recipe" className={classes.avatar}>
-              R {/* //TODO: USER AVATAR*/}
+              {this.props.user.firstname[0]}
             </Avatar>
           }
           action={
@@ -142,12 +259,12 @@ class SinglePost extends React.Component {
           })}
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="vote count">{this.state.voteCount}</IconButton>
 
-          <IconButton aria-label="Up vote " onClick={this.upVote}>
+          <IconButton aria-label="vote count">{this.state.voteCount}</IconButton>
+          <IconButton aria-label="Up vote " onClick={this.state.upvoted? this.deleteUpVote:this.upVote} color={this.state.upvoted?"secondary":""}>
             <ArrowUpward />
           </IconButton>
-          <IconButton aria-label="Down vote " onClick={this.downVote}>
+          <IconButton aria-label="Down vote " onClick={this.state.downvoted?this.deleteDownVote:this.downVote} color={this.state.downvoted?"secondary":""}>
             <ArrowDownward />
           </IconButton>
           <IconButton aria-label="Add to favorites" onClick={this.saveToFavorite}>
