@@ -12,6 +12,7 @@ import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { withSnackbar } from 'notistack';
 
 import Api from '../../api';
 
@@ -68,13 +69,19 @@ class SignIn extends React.Component{
             firstname: this.state.firstname,
             lastname: this.state.lastname
         };
-        Api.signup(data)
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        if((data.username && data.email) && (data.firstname && data.password)){
+            return Api.create('users', data)
+              .then( response => {
+                  this.props.enqueueSnackbar('Signed up Successfully, please Login to continue')
+                  this.props.history.push('/login');
+              })
+              .catch( error => {
+                  this.props.enqueueSnackbar("Please check if the email and username are valid", {variant: "error"})
+              })
+          }
+        else {
+            this.props.enqueueSnackbar("Please fill all the fields", {variant: "warning"})
+        }
     };
 
     render () {
@@ -136,4 +143,4 @@ SignIn.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+export default withSnackbar(withStyles(styles)(SignIn));

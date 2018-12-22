@@ -23,8 +23,8 @@ export default class Api{
                     }
                 },
                 error => {
-                    if (error.response) {
-                        if (error.response.status === 401) {
+                  if (error.response) {
+                    if (error.response.status === 401) {
                             return {
                                 error: true,
                                 message: "Incorrect username or password"
@@ -66,15 +66,7 @@ export default class Api{
   };
 
   static signup = (data) => {
-    if(data.username && data.email){
-      return Api.create('users', data)
-        .then( response => {
-          return response;
-        })
-        .catch( error => {
-          return error;
-        })
-    }
+    
   }
 
   static create(pluralName, data, filter=null){
