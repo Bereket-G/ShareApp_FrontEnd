@@ -6,6 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 // import Badge from '@material-ui/core/Badge';
+import CastForEducationSharp from "@material-ui/icons/CastForEducationSharp";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { fade } from "@material-ui/core/styles/colorManipulator";
@@ -33,7 +34,8 @@ const styles = theme => ({
     display: "none",
     [theme.breakpoints.up("sm")]: {
       display: "block"
-    }
+    },
+    fontFamily: "IBM 3270"
   },
   search: {
     position: "relative",
@@ -175,7 +177,8 @@ class Header extends React.Component {
             <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+            <Typography className={classes.title} style={{}} variant="h6" color="inherit" noWrap>
+              <CastForEducationSharp />
               myEdu
             </Typography>
             <span style={{ marginLeft: "50px" }} />
