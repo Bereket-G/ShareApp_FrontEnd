@@ -1,16 +1,33 @@
 import React, { Component } from 'react';
 import SinglePost from "./SinglePost";
+import Api from '../../api';
 
 export default class Posts extends Component {
     constructor(props){
         super(props);
         this.state = {
             open: false,
-            posts: [{title: "Post 1"},{title: "Post 2"},{title: "Post 3"},{title: "Post 4"},{title: "Post 5"},{title: "Post 6"},{title: "Post 7"},{title: "Post 8"}]
+            posts: [],
+            topics: [],
         }
     }
     componentDidMount(){
         this.props.changeTitle(this.props.match.params.topic || "Home");
+        this.getPosts();
+    }
+    getPosts = () => {
+        Api.find('posts')
+                .then( response => {
+                    let posts = []
+                    response.data.map( (post, idx) => {
+                        return Api.findRelated('posts',"topics", post.id)
+                            .then( response => {
+                                post.topic = response.data
+                                posts.push(post);
+                                this.setState({posts});
+                            })
+                    })
+                }).catch ( error => console.log(error))
     }
   render() {
       const list = this.state.posts
@@ -22,7 +39,7 @@ export default class Posts extends Component {
                     <div key={idx} >
                     <br />
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <SinglePost changeTitle = {this.props.changeTitle} key={idx} title={item.title}/>
+                        <SinglePost changeTitle = {this.props.changeTitle} key={item.id} title={item.title} description={item.description} file={item.file} topics={item.topic}/>
                     </div>
                     </div>
                 );

@@ -2,43 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import red from '@material-ui/core/colors/red';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import Select from 'react-select';
+import Api from '../../api'
 
 
-import { Upload, Icon, message } from 'antd';
+import { Upload, Icon } from 'antd';
 
 const Dragger = Upload.Dragger;
-
-const dragger_antd = {
-    name: 'file',
-    multiple: true,
-    action: '//jsonplaceholder.typicode.com/posts/',
-    onChange(info) {
-        const status = info.file.status;
-        if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-};
-
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-];
-
 
 const styles = theme => ({
     card: {
@@ -90,14 +63,27 @@ class NewPost extends React.Component {
             expanded: false,
             title: this.props.title,
             subheader: Date(),
-            topics : [ "MySQL", "SQL", "Database" ]
+            topics :  [],
         };
 
+    }
+    componentDidMount(){
+        this.getTopics();
     }
 
     handleExpandClick = () => {
         this.setState(state => ({ expanded: !state.expanded }));
     };
+    getTopics = () => {
+        let topics = [];
+        Api.find('topics')
+            .then( response => {
+                    topics = response.data.map(topic =>{
+                            return {label: topic.name, value:topic.id};
+                    })
+                    this.setState({topics});
+            })
+    }
 
     render() {
         const { classes } = this.props;
@@ -115,6 +101,7 @@ class NewPost extends React.Component {
                         className={classes.textField}
                         style={{width : "100%"}}
                         margin="dense"
+                        onChange={this.props.onTitle}
                     />
 
 
@@ -130,23 +117,24 @@ class NewPost extends React.Component {
                         className={classes.descriptionTextField}
                         margin="normal"
                         variant="outlined"
+                        onChange={this.props.onDescription}
                     />
 
                     <br/>
                     <br/>
 
                     <Select
-                        defaultValue={[options[2], options[1]]}
                         isMulti
                         name="colors"
-                        options={options}
+                        options={this.state.topics}
                         className="basic-multi-select"
                         classNamePrefix="select"
+                        onChange={this.props.onTopics}
                     />
 
                     <br/>
 
-                    <Dragger {...dragger_antd}>
+                    <Dragger name="file" beforeUpload={this.props.onDragger}>
                         <p className="ant-upload-drag-icon">
                             <Icon type="inbox" />
                         </p>

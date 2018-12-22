@@ -14,8 +14,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import red from '@material-ui/core/colors/red';
+import { withSnackbar } from 'notistack';
 
 import NewPost from '../views/post/newPost';
+import Api from '../api';
 
 const styles = theme => ({
   avatar: {
@@ -57,7 +59,11 @@ class Footer extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      open: false
+      open: false,
+      title: "",
+      description: "",
+      topics: [],
+      fileList: []
     }
   }
 
@@ -68,6 +74,46 @@ class Footer extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+
+  handleSubmit = () => {
+    let post = {
+      title:this.state.title,
+      description:this.state.description
+    }
+    if(this.state.fileList.length && this.state.title){
+      Api.upload('posts', this.state.fileList)
+            .then( response => {
+              var files = response.data.result.files.data;
+              if (files.length) {
+                  var file = files[0];
+                  post.file = `${Api.API_BASE_URL}Containers/${file.container}/download/${file.name}`;
+                  Api.create('posts', post)
+                        .then( response => {
+                          this.state.topics.map((topic, idx) => {
+                            if(this.state.topics.length - 1 === idx ) {
+                              //TODO REFRESH!!!
+                            }
+                            return Api.create('post_topics', {postId: response.data.id, topicId: topic.value})
+                          })
+                          this.props.enqueueSnackbar("Post Submitted Successfully", {variant:"success"});
+                        }).catch( error => {
+                          console.log(error)
+                          this.props.enqueueSnackbar("Sorry! upload failed", {variant:"error"});
+                        })
+              }
+            }).catch(error => {
+              console.log(error)
+              this.props.enqueueSnackbar("Sorry! upload failed", {variant:"error"});
+            })
+    }
+    this.setState({ open: false });
+  };
+  
+  onFileChooser = (files) => {
+   this.setState({fileList: [files]})
+   return false;
+  }
+
 
   render(){
     const { classes } = this.props;
@@ -87,16 +133,18 @@ class Footer extends React.Component {
           <DialogContent>
             <DialogContentText>
               
+           <NewPost 
+                onTitle={(e)=>this.setState({title:e.target.value})} 
+                onDescription={(e)=>this.setState({description:e.target.value})} 
+                onTopics={(e)=>this.setState({topics:e})} 
+                onDragger={this.onFileChooser}/>
             </DialogContentText>
-           <NewPost>
-
-           </NewPost>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleSubmit} color="primary">
               Post
             </Button>
           </DialogActions>
@@ -118,4 +166,4 @@ Footer.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Footer);
+export default withSnackbar(withStyles(styles)(Footer));
