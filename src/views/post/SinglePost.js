@@ -94,6 +94,7 @@ class SinglePost extends React.Component {
   topicClicked = topic => {
     this.props.changeTitle(topic);
     this.props.history.push("/" + topic);
+    this.props.onClick(topic);
   };
 
   render() {
@@ -135,7 +136,9 @@ class SinglePost extends React.Component {
                 label={value}
                 color="primary"
                 variant="outlined"
-                onClick={() => this.topicClicked(value)}
+                onClick={() => {
+                  this.topicClicked(value);
+                }}
               />
             );
           })}
