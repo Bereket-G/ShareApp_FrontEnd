@@ -5,7 +5,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
-// import Badge from '@material-ui/core/Badge';
 import CastForEducationSharp from "@material-ui/icons/CastForEducationSharp";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
@@ -13,14 +12,23 @@ import { fade } from "@material-ui/core/styles/colorManipulator";
 import { withStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
+import Subscriptions from "@material-ui/icons/Subscriptions";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-// import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { withRouter } from "react-router-dom";
 import Api from "../api";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const styles = theme => ({
+  list: {
+    width: 250
+  },
   root: {
     width: "100%"
   },
@@ -92,10 +100,17 @@ const styles = theme => ({
 });
 
 class Header extends React.Component {
-  state = {
-    anchorEl: null,
-    mobileMoreAnchorEl: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      left: false,
+      anchorEl: null,
+      mobileMoreAnchorEl: null,
+      drawerIsOpen: false,
+      subscribedTopics: []
+    };
+    // this.sidebar = React.createRef();
+  }
 
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -118,7 +133,16 @@ class Header extends React.Component {
   handleMobileMenuClose = () => {
     this.setState({ mobileMoreAnchorEl: null });
   };
-
+  handleDrawer = () => {
+    // this.setState({});
+    console.log("this.sidebar.current.toggleDrawer");
+    this.sidebar.me();
+  };
+  toggleDrawer = (side, open) => () => {
+    this.setState({
+      [side]: open
+    });
+  };
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
@@ -170,13 +194,38 @@ class Header extends React.Component {
         </MenuItem>
       </Menu>
     );
-
+    const sideList = (
+      <div className={classes.list}>
+        <Divider />
+        <List>
+          <ListItemIcon style={{ padding: "10px" }}>
+            <Subscriptions /> &nbsp;&nbsp;&nbsp;&nbsp; Subscriptions
+          </ListItemIcon>
+          {/* {this.state.subscribedTopics.map(topicTitle => ( */}
+          {["ToPIC 1", "ToPIC 2"].map(topicTitle => (
+            <ListItem button key={topicTitle}>
+              <ListItemText primary={topicTitle} />
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    );
     return (
       <div className={classes.root}>
+        <Drawer open={this.state.left} onClose={this.toggleDrawer("left", false)}>
+          <div
+            tabIndex={0}
+            role="button"
+            onClick={this.toggleDrawer("left", false)}
+            onKeyDown={this.toggleDrawer("left", false)}
+          >
+            {sideList}
+          </div>
+        </Drawer>
         <AppBar position="fixed" color="default">
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <MenuIcon />
+              <MenuIcon onClick={this.toggleDrawer("left", true)} />
             </IconButton>
             <Typography
               className={classes.title}
