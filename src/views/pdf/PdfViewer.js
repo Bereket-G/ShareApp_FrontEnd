@@ -21,22 +21,27 @@ export default class PdfViewer extends Component {
   };
   handlePdfClick = ({ numPages }) => {
     console.log("CLicked");
-    window.open(pdf, "_blank");
+    window.open(this.props.pdf, "_blank");
   };
 
   render() {
     const { pageNumber, numPages } = this.state;
 
     return (
-      <div>
+      <div style={{ alignItems: "center", justifyContent: "center" }}>
         <PerfectScrollbar style={{ height: "300px" }}>
           <Document
-            file={pdf}
+            style={{ width: "100%" }}
+            file={this.props.file}
             onLoadSuccess={this.onDocumentLoadSuccess}
             noData=""
             onItemClick={this.handlePdfClick}
           >
-            <Page pageNumber={pageNumber} onClick={this.handlePdfClick} />
+            <Page
+              style={{ alignItems: "center", justifyContent: "center" }}
+              pageNumber={pageNumber}
+              onClick={this.handlePdfClick}
+            />
           </Document>
         </PerfectScrollbar>
         <p style={{ float: "right", paddingRight: "50px" }}>

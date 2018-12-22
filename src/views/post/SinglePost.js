@@ -4,7 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import classnames from "classnames";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
-import CardMedia from "@material-ui/core/CardMedia";
+// import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 // import Collapse from '@material-ui/core/Collapse';
@@ -28,7 +28,8 @@ import PdfViewer from "../pdf/PdfViewer";
 
 const styles = theme => ({
   card: {
-    minWidth: 800
+    minWidth: 800,
+    maxWidth: 800
   },
   media: {
     height: 0,
@@ -70,8 +71,8 @@ class SinglePost extends React.Component {
       expanded: false,
       title: this.props.title,
       voteCount: 0,
-      subheader: Date(),
-      topics: ["MySQL", "SQL", "Database"]
+      subheader: "Created Recently",
+      topics: this.props.topics
     };
   }
 
@@ -116,14 +117,9 @@ class SinglePost extends React.Component {
           title={this.state.title}
           subheader={this.state.subheader}
         />
-        {/* <CardMedia
-                  className={classes.media}
-                  image="/static/images/cards/paella.jpg"
-                  title="Paella dish"
-              /> */}
-        <PdfViewer />
+        <PdfViewer file={this.props.file} />
         <CardContent>
-          <Typography component="p">TODO: Description goes here</Typography>
+          <Typography component="p">{this.props.description}</Typography>
 
           <Divider variant="middle" className={classes.divider} />
           <br />
@@ -132,13 +128,11 @@ class SinglePost extends React.Component {
             return (
               <Chip
                 className={classes.chip}
-                key={idx}
-                label={value}
+                key={value.id}
+                label={value.name}
                 color="primary"
                 variant="outlined"
-                onClick={() => {
-                  this.topicClicked(value);
-                }}
+                onClick={() => this.topicClicked(value.name)}
               />
             );
           })}
