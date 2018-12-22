@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
-
 import { Document, Page } from "react-pdf";
 // import pdf from "./inside.pdf";
 
@@ -21,7 +20,7 @@ export default class PdfViewer extends Component {
   };
   handlePdfClick = ({ numPages }) => {
     // window.open(this.props.pdf, "_blank");
-    this.props.history.push("/" + key + "");
+    // this.props.history.push("/" + key + "");
   };
 
   render() {
@@ -29,7 +28,13 @@ export default class PdfViewer extends Component {
 
     return (
       <div>
-        <PerfectScrollbar style={{ height: "300px" }}>
+        <PerfectScrollbar
+          style={{
+            height: "300px",
+            top: "10%",
+            left: "10%"
+          }}
+        >
           <Document
             file={this.props.file}
             onLoadSuccess={this.onDocumentLoadSuccess}

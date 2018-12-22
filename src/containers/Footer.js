@@ -158,7 +158,10 @@ class Footer extends React.Component {
         <CssBaseline />
         <AppBar position="fixed" color="default" className={classes.appBar}>
           <Fab
-            style={{ float: "right" }}
+            style={{
+              top: "-130%",
+              right: "-50%"
+            }}
             color="secondary"
             aria-label="Add"
             className={classes.fabButton}
@@ -166,7 +169,7 @@ class Footer extends React.Component {
           >
             <AddIcon />
           </Fab>
-          <Toolbar className={classes.toolbar} />
+          <Toolbar className={classes.toolbar}>©myEdu 2018</Toolbar>
         </AppBar>
       </React.Fragment>
     );
