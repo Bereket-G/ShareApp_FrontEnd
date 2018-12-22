@@ -41,7 +41,7 @@ export default class Posts extends Component {
 
   render() {
     const list = this.state.posts;
-    console.log(this.state.topicTitle == "Home", this.state.topicTitle);
+    console.log(this.state.topicTitle === "Home", this.state.topicTitle);
     return (
       <div>
         <Topic
@@ -66,6 +66,7 @@ export default class Posts extends Component {
                     description={item.description}
                     file={item.file}
                     topics={item.topic}
+                    createdAt={item.createdAt}
                   />
                 </div>
               </div>
