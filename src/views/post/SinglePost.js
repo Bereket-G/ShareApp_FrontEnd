@@ -238,7 +238,7 @@ class SinglePost extends React.Component {
           title={this.state.title}
           subheader={this.state.subheader}
         />
-        <PdfViewer file={this.props.file} />
+        <PdfViewer file={this.props.file} onClick={this.props.onClick}/>
         <CardContent>
           <Typography component="p">{this.props.description}</Typography>
 

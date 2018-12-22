@@ -17,10 +17,9 @@ export default class Posts extends Component {
     this.props.changeTitle(this.props.match.params.topic || "Home");
     this.getPosts();
   }
-  onClick = key => {
-    this.setState({
-      topicTitle: key
-    });
+  onClick = (topic, id)=> {
+    let chosen = topic.length? topic[0].name : "Other"
+   this.props.history.push('/'+chosen+"/"+id)
   };
   getPosts = () => {
     let m_topic = this.props.match.params.topic;
@@ -72,7 +71,7 @@ export default class Posts extends Component {
                   <SinglePost
                     changeTitle={this.props.changeTitle}
                     enqueueSnackbar={this.props.enqueueSnackbar}
-                    onClick={this.onClick}
+                    onClick={()=>this.onClick(item.topic,item.id)}
                     key={item.id}
                     id={item.id}
                     user={item.user}

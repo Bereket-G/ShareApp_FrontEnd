@@ -38,9 +38,8 @@ export default class PdfViewer extends Component {
           <Document
             file={this.props.file}
             onLoadSuccess={this.onDocumentLoadSuccess}
-            onItemClick={this.handlePdfClick}
           >
-            <Page pageNumber={pageNumber} onClick={this.handlePdfClick} />
+            <Page pageNumber={pageNumber} onClick={this.props.onClick} />
           </Document>
         </PerfectScrollbar>
         <p style={{ float: "right", paddingRight: "50px" }}>

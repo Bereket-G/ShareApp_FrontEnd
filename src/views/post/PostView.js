@@ -1,17 +1,38 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import classnames from "classnames";
+import Card from "@material-ui/core/Card";
+import CardHeader from "@material-ui/core/CardHeader";
+// import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
+// import Collapse from '@material-ui/core/Collapse';
+import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
 import red from "@material-ui/core/colors/red";
-import SinglePost from "./SinglePost";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import ShareIcon from "@material-ui/icons/Share";
+import ArrowUpward from "@material-ui/icons/ArrowUpward";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
+// import Badge from '@material-ui/core/Badge';
+import Chip from "@material-ui/core/Chip";
+import Divider from "@material-ui/core/Divider";
+
 import { withRouter } from "react-router-dom";
-import { pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${
-  pdfjs.version
-}/pdf.worker.js`;
+
+// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import PdfViewer from "../pdf/PdfViewer";
+import moment from "moment";
+import Api from '../../api';
+import ClientSession from '../../api/client-session';
+
 const styles = theme => ({
   card: {
-    minWidth: 800,
-    maxWidth: 800
+    minWidth: 1400,
+    maxWidth: 1400
   },
   media: {
     height: 0,
@@ -50,28 +71,229 @@ class PostView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      numPages: null,
-      pageNumber: 1,
-      post: null
+      post:{},
+      voteCount: 0,
+      upvoted: false,
+      downvoted: false,
     };
   }
 
+  componentDidMount() {
+    this.getPost();
+    this.getVoteCount();
+    this.setVoteStatus();
+  }
+
+
+    getPost = () => {
+      let id = this.props.match.params.id;
+      Api.find("posts", id, `filter={"include":"user"}`)
+        .then(response => {
+            Api.findRelated("posts", "topics", response.data.id).then(response2 => {
+              response.data.topics = response2.data;
+              this.setState({ post : response.data });
+            });
+        })
+        .catch(error => console.log(error));
+    };
+
+
+  upVote = () => {
+    let data = {postId: this.props.match.params.id}
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      data.userId = value.user.id;
+    });
+    let where = `where=${JSON.stringify(data)}`;
+    data.upVote = true;
+    Api.create('votes/upsertWithWhere', data, where)
+        .then( response => {
+          this.setState({upvoted:true, downvoted:false})
+          this.getVoteCount();
+          // this.props.enqueueSnackbar("Upvoted!", {variant:"success"});
+        }).catch(error => {
+          this.getVoteCount();
+          // this.props.enqueueSnackbar("Error!", {variant:"error"});
+        })
+  };
+  deleteUpVote = () => {
+    let data = {postId: this.props.match.params.id}
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      data.userId = value.user.id;
+    });
+    data.upVote = true;
+    Api.find('votes',null,`filter={"where":${JSON.stringify(data)}}`)
+        .then( response => {
+          if(response.data.length){
+            Api.destroy('votes', response.data[0].id)
+              .then( response => {
+                this.setState({upvoted:false,downvoted:false})
+                this.getVoteCount();
+              }).catch(error => {
+                this.getVoteCount();
+              })
+          }
+        }).catch(error => {
+          this.getVoteCount();
+        })
+  }
+  deleteDownVote = () => {
+    let data = {postId: this.props.match.params.id}
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      data.userId = value.user.id;
+    });
+    data.upVote = false;
+    Api.find('votes',null,`filter={"where":${JSON.stringify(data)}}`)
+        .then( response => {
+          if(response.data.length){
+            Api.destroy('votes', response.data[0].id)
+              .then( response => {
+                this.setState({downvoted:false, upvoted:false})
+                this.getVoteCount();
+              }).catch(error => {
+                this.getVoteCount();
+              })
+          }
+        }).catch(error => {
+          this.getVoteCount();
+        })
+  }
+  downVote = () => {
+    let data = {postId: this.props.match.params.id}
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      data.userId = value.user.id;
+    });
+    let where = `where=${JSON.stringify(data)}`;
+    data.upVote = false;
+    Api.create('votes/upsertWithWhere', data, where)
+        .then( response => {
+          this.setState({downvoted:true, upvoted:false})
+          this.getVoteCount();
+          // this.props.enqueueSnackbar("Downvoted!", {variant:"info"});
+        }).catch(error => {
+          this.getVoteCount();
+          // this.props.enqueueSnackbar("Error!", {variant:"error"});
+        })
+  };
+
+  getVoteCount = () => {
+    let filter = `filter={"where":{"postId":"${this.props.match.params.id}"}}`
+    let count = 0;
+    Api.find('votes', null, filter)
+      .then( response => {
+        if(!response.data.length){
+          this.setState({voteCount: 0})
+        }
+        response.data.map( vote => {
+          if(vote.upVote){
+            count++;
+          }
+          else {
+            count--;
+          }
+          this.setState({voteCount: count})
+        })
+      })
+  }
+
+  setVoteStatus = () => {
+    let postId = this.props.match.params.id;
+    ClientSession.getAuth((err, value) => {
+      if(!value) return window.location.reload();
+      let userId = value.user.id;
+      let filter = `filter={"where":{"userId":"${userId}","postId":"${postId}"}}`
+      Api.find('votes', null, filter)
+          .then( response => {
+            if(response.data.length && response.data[0]){
+              this.setState({upvoted:response.data[0].upVote, downvoted: !response.data[0].upVote});
+            }
+          }).catch(error => console.log(error));
+    });
+  }
+
+  saveToFavorite = () => {
+    // save to favorite
+  };
+
+  topicClicked = topic => {
+    this.props.changeTitle(topic);
+    this.props.history.push("/" + topic);
+    this.props.onClick(topic);
+  };
+
+  handlePostClick = () => {
+    //   this.props.history.push("/" + this.props.match.params.topic + )
+  };
   render() {
-    const { post } = this.state;
+    const { classes } = this.props;
+
     return (
-      <SinglePost
-        changeTitle={this.props.changeTitle}
-        enqueueSnackbar={this.props.enqueueSnackbar}
-        onClick={this.onClick}
-        key={post.id}
-        id={post.id}
-        user={post.user}
-        title={post.title}
-        description={post.description}
-        file={post.file}
-        topics={post.topic}
-        createdAt={post.createdAt}
-      />
+      <div style={{alignContent:"center", alignItems:"center",justifyContent:"center", display:"flex", marginTop:"5%"}}>
+
+      <Card className={classes.card}>
+        <CardHeader
+          avatar={
+            <Avatar aria-label="Recipe" className={classes.avatar}>
+              {this.state.post && this.state.post.user ?this.state.post.user.firstname[0]:""}
+            </Avatar>
+          }
+          action={
+            <IconButton>
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={this.state.title}
+          subheader={this.state.subheader}
+        />
+        <PdfViewer file={this.state.post?this.state.post.file:""} />
+        <CardContent>
+          <Typography component="p">{this.state.post?this.state.post.description:""}</Typography>
+
+          <Divider variant="middle" className={classes.divider} />
+          <br />
+
+          {this.state.post&&this.state.post.topic?this.state.post.topic.map((value, idx) => {
+            return (
+              <Chip
+                className={classes.chip}
+                key={value.id}
+                label={value.name}
+                color="primary"
+                variant="outlined"
+                onClick={() => this.topicClicked(value.name)}
+              />
+            );
+          }):""}
+        </CardContent>
+        <CardActions className={classes.actions} disableActionSpacing>
+
+          <IconButton aria-label="vote count">{this.state.voteCount}</IconButton>
+          <IconButton aria-label="Up vote " onClick={this.state.upvoted? this.deleteUpVote:this.upVote} color={this.state.upvoted?"secondary":"inherit"}>
+            <ArrowUpward />
+          </IconButton>
+          <IconButton aria-label="Down vote " onClick={this.state.downvoted?this.deleteDownVote:this.downVote} color={this.state.downvoted?"secondary":"inherit"}>
+            <ArrowDownward />
+          </IconButton>
+          <IconButton aria-label="Add to favorites" onClick={this.saveToFavorite}>
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="Share">
+            <ShareIcon />
+          </IconButton>
+          <IconButton
+            className={classnames(classes.expand, {
+              [classes.expandOpen]: this.state.expanded
+            })}
+            onClick={this.handleExpandClick}
+            aria-expanded={this.state.expanded}
+            aria-label="Show more"
+          />
+        </CardActions>
+      </Card>
+      </div>
     );
   }
 }
