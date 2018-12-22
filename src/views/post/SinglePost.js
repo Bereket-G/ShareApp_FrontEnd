@@ -98,6 +98,9 @@ class SinglePost extends React.Component {
     this.props.onClick(topic);
   };
 
+  handlePostClick = () => {
+    //   this.props.history.push("/" + this.props.match.params.topic + )
+  };
   render() {
     const { classes } = this.props;
 
