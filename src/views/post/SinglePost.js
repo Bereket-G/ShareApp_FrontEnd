@@ -16,7 +16,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Badge from '@material-ui/core/Badge';
+// import Badge from '@material-ui/core/Badge';
 import Chip from '@material-ui/core/Chip';
 import Divider from '@material-ui/core/Divider';
 
@@ -24,6 +24,7 @@ import { withRouter } from 'react-router-dom';
 
 // import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PdfViewer from '../pdf/PdfViewer';
 
 const styles = theme => ({
     card: {
