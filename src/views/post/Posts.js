@@ -25,13 +25,23 @@ export default class Posts extends Component {
     }
   };
   getPosts = () => {
+    let m_topic = this.props.match.params.topic;
     Api.find("posts")
       .then(response => {
         let posts = [];
         response.data.map((post, idx) => {
           return Api.findRelated("posts", "topics", post.id).then(response => {
             post.topic = response.data;
-            posts.push(post);
+            if(!m_topic){
+              posts.push(post);
+            }
+            else{
+              post.topic.map( item => {
+                if(item.name === m_topic){
+                  posts.push(post);
+                }
+              })
+            }
             this.setState({ posts });
           });
         });
