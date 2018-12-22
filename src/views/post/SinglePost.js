@@ -25,6 +25,7 @@ import { withRouter } from "react-router-dom";
 // import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import PdfViewer from "../pdf/PdfViewer";
+import moment from "moment";
 
 const styles = theme => ({
   card: {
@@ -71,7 +72,7 @@ class SinglePost extends React.Component {
       expanded: false,
       title: this.props.title,
       voteCount: 0,
-      subheader: "Created Recently",
+      subheader: moment(this.props.createdAt).format("MMM DD, YYYY HH:mm"),
       topics: this.props.topics
     };
   }

@@ -176,7 +176,7 @@ class Header extends React.Component {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-              ShareApp
+              myEdu
             </Typography>
             <span style={{ marginLeft: "50px" }} />
             <Typography className={classes.title} variant="subtitle1" color="secondary" noWrap>

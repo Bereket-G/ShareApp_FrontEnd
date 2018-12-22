@@ -2,7 +2,8 @@ import axios from "axios";
 import ClientSession from "./client-session.js";
 
 let API_BASE_URL = "https://aterera.herokuapp.com/api/";
-// http://10.5.84.247:5000/explorer/
+// let API_BASE_URL = "http://localhost:5000/api/";
+
 export default class Api {
   static API_BASE_URL = API_BASE_URL;
 

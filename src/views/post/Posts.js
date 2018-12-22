@@ -23,13 +23,23 @@ export default class Posts extends Component {
     });
   };
   getPosts = () => {
+    let m_topic = this.props.match.params.topic;
     Api.find("posts")
       .then(response => {
         let posts = [];
         response.data.map((post, idx) => {
           return Api.findRelated("posts", "topics", post.id).then(response => {
             post.topic = response.data;
-            posts.push(post);
+            if(!m_topic){
+              posts.push(post);
+            }
+            else{
+              post.topic.map( item => {
+                if(item.name === m_topic){
+                  posts.push(post);
+                }
+              })
+            }
             this.setState({ posts });
           });
         });
@@ -39,7 +49,7 @@ export default class Posts extends Component {
 
   render() {
     const list = this.state.posts;
-    console.log(this.state.topicTitle == "Home", this.state.topicTitle);
+    console.log(this.state.topicTitle === "Home", this.state.topicTitle);
     return (
       <div>
         <br />
@@ -67,6 +77,7 @@ export default class Posts extends Component {
                     description={item.description}
                     file={item.file}
                     topics={item.topic}
+                    createdAt={item.createdAt}
                   />
                 </div>
               </div>
