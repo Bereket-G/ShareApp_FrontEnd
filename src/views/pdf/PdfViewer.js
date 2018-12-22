@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
-
 import { Document, Page } from "react-pdf";
-import pdf from "./inside.pdf";
-
 import { pdfjs } from "react-pdf";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${
   pdfjs.version
@@ -29,7 +26,13 @@ export default class PdfViewer extends Component {
 
     return (
       <div>
-        <PerfectScrollbar style={{ height: "300px" }}>
+        <PerfectScrollbar
+          style={{
+            height: "300px",
+            top: "10%",
+            left: "10%"
+          }}
+        >
           <Document
             file={this.props.file}
             onLoadSuccess={this.onDocumentLoadSuccess}
