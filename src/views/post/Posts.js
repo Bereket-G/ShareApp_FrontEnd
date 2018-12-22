@@ -57,7 +57,7 @@ export default class Posts extends Component {
         <br />
         <br />
         <Topic
-          topicTitle={this.state.topicTitle}
+          topicTitle={this.props.match.params.topic || 'Home'}
           topicDesc={
             this.state.topicTitle === "Home"
               ? "Welcome to myEdu community!"

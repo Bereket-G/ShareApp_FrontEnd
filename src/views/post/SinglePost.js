@@ -261,10 +261,10 @@ class SinglePost extends React.Component {
         <CardActions className={classes.actions} disableActionSpacing>
 
           <IconButton aria-label="vote count">{this.state.voteCount}</IconButton>
-          <IconButton aria-label="Up vote " onClick={this.state.upvoted? this.deleteUpVote:this.upVote} color={this.state.upvoted?"secondary":""}>
+          <IconButton aria-label="Up vote " onClick={this.state.upvoted? this.deleteUpVote:this.upVote} color={this.state.upvoted?"secondary":"inherit"}>
             <ArrowUpward />
           </IconButton>
-          <IconButton aria-label="Down vote " onClick={this.state.downvoted?this.deleteDownVote:this.downVote} color={this.state.downvoted?"secondary":""}>
+          <IconButton aria-label="Down vote " onClick={this.state.downvoted?this.deleteDownVote:this.downVote} color={this.state.downvoted?"secondary":"inherit"}>
             <ArrowDownward />
           </IconButton>
           <IconButton aria-label="Add to favorites" onClick={this.saveToFavorite}>
