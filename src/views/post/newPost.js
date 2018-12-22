@@ -5,7 +5,6 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Avatar from '@material-ui/core/Avatar';
 import red from '@material-ui/core/colors/red';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -65,9 +64,7 @@ const styles = theme => ({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
-    avatar: {
-        backgroundColor: red[500],
-    },
+   
     input: {
         margin: theme.spacing.unit,
     },
@@ -79,14 +76,14 @@ const styles = theme => ({
     descriptionTextField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        width : "90%"
+        width : "100%"
     },
     rightIcon: {
         marginLeft: theme.spacing.unit,
     },
 });
 
-class SinglePost extends React.Component {
+class NewPost extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -109,15 +106,6 @@ class SinglePost extends React.Component {
             <Grid container spacing={24}>
                 <Grid item xs={3}>
                     <Card className={classes.card}>
-                <CardHeader
-                    avatar={
-                        <Avatar aria-label="Plus" className={classes.avatar}>
-                            + {/* //TODO: USER AVATAR*/}
-                        </Avatar>
-                    }
-
-                    title="New Post"
-                />
                 <CardContent>
 
 
@@ -125,7 +113,7 @@ class SinglePost extends React.Component {
                         id="standard-dense"
                         label="Title"
                         className={classes.textField}
-                        style={{width : "50%"}}
+                        style={{width : "100%"}}
                         margin="dense"
                     />
 
@@ -168,13 +156,6 @@ class SinglePost extends React.Component {
 
 
                 </CardContent>
-                <CardActions className={classes.actions} disableActionSpacing>
-                    <Button variant="contained" color="primary" className={classes.button} style={{float: "right"}}>
-                        Send
-                        {/* This Button uses a Font Icon, see the installation instructions in the docs. */}
-                        <Icon className={classes.rightIcon}>send</Icon>
-                    </Button>
-                </CardActions>
             </Card>
                 </Grid>
             </Grid>
@@ -182,8 +163,8 @@ class SinglePost extends React.Component {
     }
 }
 
-SinglePost.propTypes = {
+NewPost.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SinglePost);
+export default withStyles(styles)(NewPost);
