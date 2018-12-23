@@ -136,40 +136,40 @@ class SinglePost extends React.Component {
     ClientSession.getAuth((err, value) => {
       if(!value) return window.location.reload();
       data.userId = value.user.id;
+      data.upVote = false;
+      Api.find('votes',null,`filter={"where":${JSON.stringify(data)}}`)
+      .then( response => {
+        if(response.data.length){
+          Api.destroy('votes', response.data[0].id)
+          .then( response => {
+            this.setState({downvoted:false, upvoted:false})
+            this.getVoteCount();
+          }).catch(error => {
+            this.getVoteCount();
+          })
+        }
+      }).catch(error => {
+        this.getVoteCount();
+      })
     });
-    data.upVote = false;
-    Api.find('votes',null,`filter={"where":${JSON.stringify(data)}}`)
-        .then( response => {
-          if(response.data.length){
-            Api.destroy('votes', response.data[0].id)
-              .then( response => {
-                this.setState({downvoted:false, upvoted:false})
-                this.getVoteCount();
-              }).catch(error => {
-                this.getVoteCount();
-              })
-          }
-        }).catch(error => {
-          this.getVoteCount();
-        })
   }
   downVote = () => {
     let data = {postId: this.props.id}
     ClientSession.getAuth((err, value) => {
       if(!value) return window.location.reload();
       data.userId = value.user.id;
+      let where = `where=${JSON.stringify(data)}`;
+      data.upVote = false;
+      Api.create('votes/upsertWithWhere', data, where)
+      .then( response => {
+        this.setState({downvoted:true, upvoted:false})
+        this.getVoteCount();
+        // this.props.enqueueSnackbar("Downvoted!", {variant:"info"});
+      }).catch(error => {
+        this.getVoteCount();
+        // this.props.enqueueSnackbar("Error!", {variant:"error"});
+      })
     });
-    let where = `where=${JSON.stringify(data)}`;
-    data.upVote = false;
-    Api.create('votes/upsertWithWhere', data, where)
-        .then( response => {
-          this.setState({downvoted:true, upvoted:false})
-          this.getVoteCount();
-          // this.props.enqueueSnackbar("Downvoted!", {variant:"info"});
-        }).catch(error => {
-          this.getVoteCount();
-          // this.props.enqueueSnackbar("Error!", {variant:"error"});
-        })
   };
 
   getVoteCount = () => {

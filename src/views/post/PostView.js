@@ -156,34 +156,33 @@ class PostView extends React.Component {
     ClientSession.getAuth((err, value) => {
       if (!value) return window.location.reload();
       data.userId = value.user.id;
-    });
-    data.upVote = false;
-    Api.find("votes", null, `filter={"where":${JSON.stringify(data)}}`)
+      data.upVote = false;
+      Api.find("votes", null, `filter={"where":${JSON.stringify(data)}}`)
       .then(response => {
         if (response.data.length) {
           Api.destroy("votes", response.data[0].id)
-            .then(response => {
-              this.setState({ downvoted: false, upvoted: false });
-              this.getVoteCount();
-            })
-            .catch(error => {
-              this.getVoteCount();
-            });
+          .then(response => {
+            this.setState({ downvoted: false, upvoted: false });
+            this.getVoteCount();
+          })
+          .catch(error => {
+            this.getVoteCount();
+          });
         }
       })
       .catch(error => {
         this.getVoteCount();
       });
+    });
   };
   downVote = () => {
     let data = { postId: this.props.match.params.id };
     ClientSession.getAuth((err, value) => {
       if (!value) return window.location.reload();
       data.userId = value.user.id;
-    });
-    let where = `where=${JSON.stringify(data)}`;
-    data.upVote = false;
-    Api.create("votes/upsertWithWhere", data, where)
+      let where = `where=${JSON.stringify(data)}`;
+      data.upVote = false;
+      Api.create("votes/upsertWithWhere", data, where)
       .then(response => {
         this.setState({ downvoted: true, upvoted: false });
         this.getVoteCount();
@@ -193,6 +192,7 @@ class PostView extends React.Component {
         this.getVoteCount();
         // this.props.enqueueSnackbar("Error!", {variant:"error"});
       });
+    });
   };
 
   getVoteCount = () => {
@@ -231,7 +231,7 @@ class PostView extends React.Component {
         .catch(error => console.log(error));
     });
   };
-  
+
   saveToFavorite = () => {
     this.setState(perv =>( {favorited: !perv.favorited}))
   };

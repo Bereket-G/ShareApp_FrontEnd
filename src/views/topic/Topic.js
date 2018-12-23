@@ -73,6 +73,7 @@ class Topic extends React.Component {
         .then( response => {
           this.setState({subscribed:true});
           this.props.enqueueSnackbar("Subscribed to the topic Successfully!", {variant:"success"});
+          window.location.reload();
         }).catch(error => {
           this.props.enqueueSnackbar("Unable to subscribe to topic, please try again!", {variant:"error"});
         })
@@ -92,6 +93,7 @@ class Topic extends React.Component {
               .then( response => {
                 this.setState({subscribed:false})
                 this.props.enqueueSnackbar("Unsubscribed Successfully!", {variant:"success"});
+                window.location.reload();
               }).catch(error => {
                 this.props.enqueueSnackbar("Error, please try again!", {variant:"error"});
               })
