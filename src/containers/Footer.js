@@ -100,7 +100,7 @@ class Footer extends React.Component {
                       topicId: topic.value
                     }).then( response => {
                       window.location.reload()
-                    });
+                    }).catch( error => window.location.reload());
                   }
                   return Api.create("post_topics", {
                     postId: response.data.id,
@@ -111,17 +111,21 @@ class Footer extends React.Component {
               })
               .catch(error => {
                 console.log(error);
-                this.props.enqueueSnackbar("Sorry! upload failed", { variant: "error" });
+                return this.props.enqueueSnackbar("Sorry! upload failed", { variant: "error" });
               });
             });
           }
         })
         .catch(error => {
           console.log(error);
-          this.props.enqueueSnackbar("Sorry! upload failed", { variant: "error" });
+          return this.props.enqueueSnackbar("Sorry! upload failed", { variant: "error" });
         });
+        this.setState({ open: false });
     }
-    this.setState({ open: false });
+    else{
+      this.props.enqueueSnackbar("Please Fill the form", { variant: "warning" });
+
+    }
   };
 
   onFileChooser = files => {

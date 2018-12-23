@@ -133,7 +133,7 @@ class Topic extends React.Component {
         />
 
         <CardContent style={{ justifyContent: "center", alignItems: "center" }}>
-          <Typography component="p">{this.props.topicDesc}</Typography>
+          <Typography component="p">{this.state.topic? this.state.topic.description:this.props.topicDesc}</Typography>
 
           {this.props.topicTitle === "Home"?"":
           <Button
