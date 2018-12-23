@@ -108,7 +108,8 @@ class Header extends React.Component {
       anchorEl: null,
       mobileMoreAnchorEl: null,
       drawerIsOpen: false,
-      subscribedTopics: []
+      subscribedTopics: [],
+      search:""
     };
     // this.sidebar = React.createRef();
   }
@@ -157,6 +158,9 @@ class Header extends React.Component {
       [side]: open
     });
   };
+  search = (e) => {
+    console.log(e.target.value);
+  }
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
@@ -268,6 +272,7 @@ class Header extends React.Component {
                   root: classes.inputRoot,
                   input: classes.inputInput
                 }}
+                onChange={this.search}
               />
             </div>
             <div className={classes.grow} />
