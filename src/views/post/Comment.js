@@ -7,7 +7,7 @@ export default class Comment extends Component {
 
     render() {
         return (
-            <div style={{ width : "80%", marginLeft : "30px", marginBottom : "15px"}}>
+            <div style={{ width : "80%", marginLeft : "50px", marginBottom : "15px"}}>
               <Avatar aria-label="Recipe" style={{float : "left" }}>
                   {this.props.username.charAt(0)} {/* //TODO: USER AVATAR*/}
               </Avatar>

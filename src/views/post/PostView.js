@@ -31,6 +31,8 @@ import moment from "moment";
 import Api from "../../api";
 import ClientSession from "../../api/client-session";
 import { pdfjs } from "react-pdf";
+import Comment from "./Comment";
+import NewComment from "./newComment";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${
   pdfjs.version
 }/pdf.worker.js`;
@@ -82,7 +84,8 @@ class PostView extends React.Component {
       upvoted: false,
       downvoted: false,
       numPages: null,
-      pageNumber: 1
+      pageNumber: 1,
+      comments : []
     };
   }
   onDocumentLoadSuccess = ({ numPages }) => {
@@ -252,6 +255,25 @@ class PostView extends React.Component {
     }));
   };
 
+  onCommentSubmit = (comment_body) => {
+
+      ClientSession.getAuth((err, value) => {
+          if (!value) return window.location.reload();
+
+          let new_comment = {
+              body: comment_body,
+              username : value.user.firstname
+          };
+
+          let new_comments = this.state.comments;
+          new_comments.push(new_comment);
+
+          this.setState({ comments : new_comments });
+
+      });
+
+  };
+
   handlePostClick = () => {
     //   this.props.history.push("/" + this.props.match.params.topic + )
   };
@@ -364,6 +386,20 @@ class PostView extends React.Component {
               aria-label="Show more"
             />
           </CardActions>
+
+          <div style={{ padding : "10px",backgroundColor : "rgba(0, 0, 0, 0.1)"}}>
+
+          <NewComment submit={this.onCommentSubmit}/>
+
+            {
+              this.state.comments.map( (comment, idx) => {
+                  return (
+                      <Comment key={idx} username={comment.username} body={comment.body}/>
+                  )
+              })
+            }
+
+          </div>
         </Card>
       </div>
     );
