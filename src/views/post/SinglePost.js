@@ -213,7 +213,6 @@ class SinglePost extends React.Component {
   topicClicked = topic => {
     this.props.changeTitle(topic);
     this.props.history.push("/" + topic);
-    this.props.onClick(topic);
   };
 
   handlePostClick = () => {
@@ -238,7 +237,7 @@ class SinglePost extends React.Component {
           title={this.state.title}
           subheader={this.state.subheader}
         />
-        <PdfViewer file={this.props.file} onClick={this.props.onClick}/>
+        <PdfViewer file={this.props.file} onClick={this.props.onItemClick}/>
         <CardContent>
           <Typography component="p">{this.props.description}</Typography>
 

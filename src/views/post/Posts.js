@@ -71,7 +71,7 @@ export default class Posts extends Component {
                   <SinglePost
                     changeTitle={this.props.changeTitle}
                     enqueueSnackbar={this.props.enqueueSnackbar}
-                    onClick={()=>this.onClick(item.topic,item.id)}
+                    onItemClick={()=>this.onClick(item.topic,item.id)}
                     key={item.id}
                     id={item.id}
                     user={item.user}
