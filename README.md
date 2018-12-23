@@ -3,8 +3,14 @@
 This application is developed in the hackathon hosted by ITSC-inspire @ Addis Ababa University. The sole purpose of this 
 application is create a platform where students can share usefull resources. 
 
+### Features
 
-Technologies
+- Users can share slides, lecture notes, worksheets, past exams etc
+- Users can vote, comment on the materials,
+- Users can subscribe to topics, subjects or authors of the materials
+
+
+### Technologies
 
 
 [Live Demo](https://mydu.herokuapp.com/#/)
@@ -25,8 +31,8 @@ A step by step series of examples that tell you how to get a development env run
 
 ## Authors
 
-* **[Abdulhamid Abdo](https://github.com/PurpleBooth)** 
-* **[Bereket Gebredingle](https://github.com/mahmai)** 
+* **[Abdulhamid Abdo](https://github.com/mahmai)** 
+* **[Bereket Gebredingle](https://github.com/Bereket-G)** 
 * **[Samuel Mussie](https://github.com/samu-el)** 
 
 ## License
