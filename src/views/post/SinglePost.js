@@ -76,6 +76,7 @@ class SinglePost extends React.Component {
       voteCount: 0,
       upvoted: false,
       downvoted: false,
+      favorited: false,
       subheader: moment(this.props.createdAt).format("HH:mm on MMM DD")+" by "+this.props.user.firstname,
       topics: this.props.topics
     };
@@ -207,7 +208,7 @@ class SinglePost extends React.Component {
   }
 
   saveToFavorite = () => {
-    // save to favorite
+    this.setState(perv =>( {favorited: !perv.favorited}))
   };
 
   topicClicked = topic => {
@@ -266,8 +267,8 @@ class SinglePost extends React.Component {
           <IconButton aria-label="Down vote " onClick={this.state.downvoted?this.deleteDownVote:this.downVote} color={this.state.downvoted?"secondary":"inherit"}>
             <ArrowDownward />
           </IconButton>
-          <IconButton aria-label="Add to favorites" onClick={this.saveToFavorite}>
-            <FavoriteIcon />
+          <IconButton aria-label="Add to favorites" color={this.state.favorited?"secondary":"inherit"} onClick={this.saveToFavorite}>
+            <FavoriteIcon/>
           </IconButton>
           <IconButton aria-label="Share">
             <ShareIcon />

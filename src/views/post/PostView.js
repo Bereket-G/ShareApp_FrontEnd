@@ -82,7 +82,8 @@ class PostView extends React.Component {
       upvoted: false,
       downvoted: false,
       numPages: null,
-      pageNumber: 1
+      pageNumber: 1,
+      favorited:false
     };
   }
   onDocumentLoadSuccess = ({ numPages }) => {
@@ -230,9 +231,9 @@ class PostView extends React.Component {
         .catch(error => console.log(error));
     });
   };
-
+  
   saveToFavorite = () => {
-    // save to favorite
+    this.setState(perv =>( {favorited: !perv.favorited}))
   };
 
   topicClicked = topic => {
@@ -349,7 +350,7 @@ class PostView extends React.Component {
             >
               <ArrowDownward />
             </IconButton>
-            <IconButton aria-label="Add to favorites" onClick={this.saveToFavorite}>
+            <IconButton aria-label="Add to favorites" color={this.state.favorited?"secondary":"inherit"} onClick={this.saveToFavorite}>
               <FavoriteIcon />
             </IconButton>
             <IconButton aria-label="Share">
