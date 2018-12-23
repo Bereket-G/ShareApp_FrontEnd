@@ -109,12 +109,16 @@ class Header extends React.Component {
       mobileMoreAnchorEl: null,
       drawerIsOpen: false,
       subscribedTopics: [],
-      search:""
+      search:"",
+      user: ""
     };
     // this.sidebar = React.createRef();
   }
   componentDidMount(){
     this.getSubscriptions();
+    ClientSession.getAuth((err, value) => {
+      this.setState({user:value.user});
+    })
   }
 
   getSubscriptions = () => {
@@ -175,7 +179,7 @@ class Header extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
+        <MenuItem onClick={this.handleMenuClose}>{this.state.user? this.state.user.username: "Profile"}</MenuItem>
         <MenuItem onClick={this.handleLogout}>Log out</MenuItem>
       </Menu>
     );
@@ -208,7 +212,7 @@ class Header extends React.Component {
           <IconButton color="inherit">
             <AccountCircle />
           </IconButton>
-          <p>Profile</p>
+          <p>{this.state.user? this.state.user.username: "Profile"}</p>
         </MenuItem>
       </Menu>
     );
